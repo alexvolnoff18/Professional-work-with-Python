@@ -71,7 +71,22 @@ def phone_number_unification(contacts_dicts):
   """
   for v in contacts_dicts.values():
     v['phone'] = re.sub(PHONE_PATTERN, PHONE_SUB, v['phone'])
+
     
+def convert_dictionary_to_list(contacts_dicts):
+  """
+  Функция преобразует словарь в список
+  """
+  contact_list = []
+  for v in contacts_dicts.values():
+    for idx, sub in enumerate(contacts_dicts.values(), start = 0):
+        if idx == 0:
+            contact_list.append(list(sub.keys()))
+            contact_list.append(list(sub.values()))
+        else:
+            contact_list.append(list(sub.values()))   
+    return contact_list
+
 
 if __name__ == '__main__':
   contacts_dicts = convert_list(contacts_list) #преобразуем список в словарь 
@@ -79,19 +94,21 @@ if __name__ == '__main__':
   add_values(contacts_dicts) #Добавляем недостающие значения, удаляем дубликаты
   contacts_dicts = dict(enumerate(contacts_dicts.values(), 1))  #Обновляем нумерацию в словаре
   phone_number_unification(contacts_dicts) #приводитим к единому стандарту телефонные номера
+  contact_list = convert_dictionary_to_list(contacts_dicts)#приобразую словарь в список
 
 
 # TODO 2: сохраните получившиеся данные в другой файл
 # код для записи файла в формате CSV
-with open("phonebook.csv", "w") as f:
+with open("phonebook.csv", "w", encoding='utf-8') as f:
   datawriter = csv.writer(f, delimiter=',')
-  datawriter.writerows(contacts_dicts.items())
+  datawriter.writerows(contact_list)
 
-  print(contacts_dicts)
 
 #Для более корректного вывода данных
 df = pd.DataFrame(contacts_dicts) #Обработка и преобразование 
 df = df.transpose()                #контактных данных в таблицу
 print(df)
 df.to_csv('table_phonebook.csv')  
-df.to_excel('table_phonebook.xlsx') 
+df.to_excel('table_phonebook.xlsx')
+  
+ 
