@@ -13,7 +13,7 @@ def logger(old_function):
         arguments = f'{args}_{kwargs}'
         result = old_function(*args, **kwargs)
         with open('main.log', 'a', encoding='utf-8') as f:
-            f.writelines(f'{date_time}, {old_function}, {arguments}, {result}')
+            f.write(f'{date_time}, {old_function}, {arguments}, {result}')
         return result
     return new_function
 
